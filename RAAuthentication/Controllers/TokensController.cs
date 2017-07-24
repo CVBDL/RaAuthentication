@@ -11,7 +11,7 @@ namespace RAAuthentication.Controllers
     [RoutePrefix("api/tokens")]
     public class TokensController : ApiController
     {
-        [Route("check")]
+        [Route("validate")]
         [HttpPost]
         public IHttpActionResult CheckToken(AuthorizationDTO authorization)
         {
@@ -23,7 +23,7 @@ namespace RAAuthentication.Controllers
             }
             else
             {
-                return NotFound();
+                return Unauthorized();
             }
         }
     }
