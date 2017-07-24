@@ -27,15 +27,15 @@ namespace RAAuthentication.JWTAuthentication
             _jwtConfig = new JWTConfig();
         }
 
-        public string GetToken(string userName)
+        public string GetToken(string email)
         {
             string token = string.Empty;
             JWTPayload payload = new JWTPayload();
-            payload.username = userName;
+            payload.email = email;
 
             try
             {
-                token = JWT.Encode(payload, Encoding.ASCII.GetBytes(_jwtConfig.SecretKey), _jwtConfig.jwsAlgorithm);
+                token = JWT.Encode(payload.jwtPayloadDTO, Encoding.ASCII.GetBytes(_jwtConfig.SecretKey), _jwtConfig.jwsAlgorithm);
             }
             catch
             {

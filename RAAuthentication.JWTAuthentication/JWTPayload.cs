@@ -6,31 +6,35 @@ using Newtonsoft.Json;
 
 namespace RAAuthentication.JWTAuthentication
 {
+    public class JWTPayloadDTO
+    {
+        public string email;
+        public long exp;
+    }
+
     public partial class JWTPayload
     {
         //Default expire time. 
         // 3600 seconds from now. 
         private const double _defaultTimeExpSeconds = 3600;
+        private JWTPayloadDTO _jwtPayloadDTO;
 
-        //User log in name 
-        private string _userName;
-        public string username
+        public JWTPayloadDTO jwtPayloadDTO
         {
-            get { return _userName; }
-            set { _userName = value; }
+            get { return _jwtPayloadDTO; }
         }
 
-        //Token expire time from now
-        private long _exp = 0;
-        public long exp
+        public string email
         {
-            get { return _exp; }
+            get { return _jwtPayloadDTO.email; }
+            set { _jwtPayloadDTO.email = value; }
         }
 
         //Constructor.
         public JWTPayload()
         {
-            _exp = DateTime.Now.AddSeconds(_defaultTimeExpSeconds).Ticks;
+            _jwtPayloadDTO = new JWTPayloadDTO();
+            _jwtPayloadDTO.exp = DateTime.Now.AddSeconds(_defaultTimeExpSeconds).Ticks;
         }
 
         //Constructor. Create new payload via json string.
@@ -38,9 +42,8 @@ namespace RAAuthentication.JWTAuthentication
         {
             try
             {
-                var _obj = JsonConvert.DeserializeObject<JWTPayload>(jsonString);
-                username = _obj.username;
-                _exp = _obj._exp;
+                var _obj = JsonConvert.DeserializeObject<JWTPayloadDTO>(jsonString);
+                _jwtPayloadDTO = _obj as JWTPayloadDTO;
             }
             catch
             {
@@ -53,13 +56,7 @@ namespace RAAuthentication.JWTAuthentication
         public bool IsExpired()
         {
             long now = DateTime.Now.Ticks;
-            return (_exp > now ? false : true);
-        }
-
-        //Convert this to JSON string.
-        public override string ToString()
-        {
-            return JsonConvert.SerializeObject(this);
+            return (_jwtPayloadDTO.exp > now ? false : true);
         }
     }
 }

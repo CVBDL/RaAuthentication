@@ -30,7 +30,7 @@ namespace RAAuthentication.JWTAuthentication
         public JWTConfig()
         {
             //Set secret key to value from environment table or default value. 
-            string varKey = Environment.GetEnvironmentVariable(RALIBRARY_JWT_KEY);
+            string varKey = Environment.GetEnvironmentVariable(RALIBRARY_JWT_KEY, EnvironmentVariableTarget.Machine);
             SecretKey = string.IsNullOrEmpty(varKey) ? _defaultSecretKey : varKey;
         }
     }
