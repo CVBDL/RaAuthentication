@@ -1,0 +1,6 @@
+*.suo
+.vs/
+obj/
+bin/
+packages/
+RAAuthentication.csproj.user
