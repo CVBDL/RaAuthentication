@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using RAAuthentication.Models;
+using RAAuthentication.JWTAuthentication;
 
 namespace RAAuthentication.Controllers
 {
@@ -24,7 +25,7 @@ namespace RAAuthentication.Controllers
 
             return new AuthorizationDTO
             {
-                AccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0ODMyMDAwMDAwMDAsImVtYWlsIjoicGF0cmljay56aG9uZ0BleGFtcGxlLmNvbSJ9.jIBK2wO6qtoAdT4v5bGaPP_ytZfIMqW_4Ofh9UTLqj4"
+                AccessToken = JWTAuthenticate.Instance().GetToken(userName)
             };
         }
 

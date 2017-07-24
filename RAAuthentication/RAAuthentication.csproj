@@ -99,6 +99,12 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RAAuthentication.JWTAuthentication\RAAuthentication.JWTAuthentication.csproj">
+      <Project>{83d0871e-c08f-4785-bdc8-0492b66f4671}</Project>
+      <Name>RAAuthentication.JWTAuthentication</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
