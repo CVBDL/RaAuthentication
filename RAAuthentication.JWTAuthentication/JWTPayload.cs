@@ -14,9 +14,9 @@ namespace RAAuthentication.JWTAuthentication
 
     public partial class JWTPayload
     {
-        //Default expire time. 
-        // 3600 seconds from now. 
-        private const double _defaultTimeExpSeconds = 3600;
+        // default expiration timespan in seconds
+        private const double ExpirationTimespanInSeconds = 60 * 60;
+
         private JWTPayloadDTO _jwtPayloadDTO;
 
         public JWTPayloadDTO jwtPayloadDTO
@@ -34,7 +34,7 @@ namespace RAAuthentication.JWTAuthentication
         public JWTPayload()
         {
             _jwtPayloadDTO = new JWTPayloadDTO();
-            _jwtPayloadDTO.exp = DateTime.Now.AddSeconds(_defaultTimeExpSeconds).Ticks;
+            _jwtPayloadDTO.exp = this.CalculateJwtExp(DateTime.UtcNow);
         }
 
         //Constructor. Create new payload via json string.
@@ -55,8 +55,18 @@ namespace RAAuthentication.JWTAuthentication
         // True if expire time is lower than now, otherwise is false.
         public bool IsExpired()
         {
-            long now = DateTime.Now.Ticks;
+            long now = this.CalculateJwtExp(DateTime.UtcNow);
             return (_jwtPayloadDTO.exp > now ? false : true);
+        }
+
+        private long CalculateJwtExp(DateTime baseDateTime)
+        {
+            double expInSeconds = baseDateTime
+                .AddSeconds(ExpirationTimespanInSeconds)
+                .Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc))
+                .TotalSeconds;
+
+            return Convert.ToInt64(expInSeconds);
         }
     }
 }
