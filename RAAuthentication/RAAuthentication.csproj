@@ -104,6 +104,10 @@
       <Project>{83d0871e-c08f-4785-bdc8-0492b66f4671}</Project>
       <Name>RAAuthentication.JWTAuthentication</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RAAuthenticationLib\RAAuthenticationLib.csproj">
+      <Project>{cef3d7d3-fb52-4800-b0b6-bf9c73fd1df1}</Project>
+      <Name>RAAuthenticationLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

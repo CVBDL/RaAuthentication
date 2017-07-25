@@ -47,21 +47,40 @@ namespace RAAuthentication.JWTAuthentication
 
         public bool IsValid(string token)
         {
-            bool isValid = false;
-            string payload = string.Empty;
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                return false;
+            }
+
+            string[] tokenParts = token.Split('.');
+            if (tokenParts.Length != 3)
+            {
+                return false;
+            }
 
             try
             {
-                payload = JWT.Decode(token, Encoding.ASCII.GetBytes(_jwtConfig.SecretKey), _jwtConfig.jwsAlgorithm);
-                JWTPayload jwtPayload = new JWTPayload(payload);
-                isValid = !jwtPayload.IsExpired();
+                // check expiration time
+                string payloadJson = JWT.Decode(token, Encoding.ASCII.GetBytes(_jwtConfig.SecretKey), _jwtConfig.jwsAlgorithm);
+                JWTPayload jwtPayload = new JWTPayload(payloadJson);
+                if (jwtPayload.IsExpired())
+                {
+                    return false;
+                }
+
+                // check signature
+                string validJwt = JWT.Encode(payloadJson, Encoding.ASCII.GetBytes(_jwtConfig.SecretKey), _jwtConfig.jwsAlgorithm);
+                if (!string.Equals(validJwt, token, StringComparison.Ordinal))
+                {
+                    return false;
+                }
             }
             catch
             {
-
+                return false;
             }
 
-            return isValid;
+            return true;
         }
     }
 }

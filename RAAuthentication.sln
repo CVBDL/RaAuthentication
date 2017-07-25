@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RAAuthentication.Tests", "R
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RAAuthentication.JWTAuthentication", "RAAuthentication.JWTAuthentication\RAAuthentication.JWTAuthentication.csproj", "{83D0871E-C08F-4785-BDC8-0492B66F4671}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RAAuthenticationLib", "RAAuthenticationLib\RAAuthenticationLib.csproj", "{CEF3D7D3-FB52-4800-B0B6-BF9C73FD1DF1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{83D0871E-C08F-4785-BDC8-0492B66F4671}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83D0871E-C08F-4785-BDC8-0492B66F4671}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83D0871E-C08F-4785-BDC8-0492B66F4671}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEF3D7D3-FB52-4800-B0B6-BF9C73FD1DF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEF3D7D3-FB52-4800-B0B6-BF9C73FD1DF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEF3D7D3-FB52-4800-B0B6-BF9C73FD1DF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEF3D7D3-FB52-4800-B0B6-BF9C73FD1DF1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

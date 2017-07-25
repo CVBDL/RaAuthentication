@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Web.Http;
 using RAAuthentication.Models;
 using RAAuthentication.JWTAuthentication;
+using RAAuthenticationLib;
+using System.Web.Http.Description;
 
 namespace RAAuthentication.Controllers
 {
@@ -18,15 +20,25 @@ namespace RAAuthentication.Controllers
         /// <returns></returns>
         [Route("")]
         [HttpPost]
-        public AuthorizationDTO GetAccessToken(CredentialDTO credential)
+        [ResponseType(typeof(AuthorizationDTO))]
+        public IHttpActionResult GetAccessToken(CredentialDTO credential)
         {
             string userName = credential.UserName;
             string password = credential.Password;
 
-            return new AuthorizationDTO
+            bool isValidUser = Authentication.CheckAuthenticate(userName, password, "ra-int");
+            if (!isValidUser)
             {
-                AccessToken = JWTAuthenticate.Instance().GetToken(userName)
+                return Unauthorized();
+            }
+
+            UserDetail userDetails = Authentication.GetUserEmailFromAD(userName, password, "ra-int");
+            AuthorizationDTO authorization = new AuthorizationDTO
+            {
+                AccessToken = JWTAuthenticate.Instance().GetToken(userDetails.EmailAddress)
             };
+
+            return Ok(authorization);
         }
 
         /// <summary>
@@ -35,18 +47,21 @@ namespace RAAuthentication.Controllers
         /// <returns></returns>
         [Route("details")]
         [HttpPost]
-        public UserDetailsDTO GetUserDetails(CredentialDTO credential)
+        [ResponseType(typeof(UserDetailsDTO))]
+        public IHttpActionResult GetUserDetails(CredentialDTO credential)
         {
             string userName = credential.UserName;
             string password = credential.Password;
 
-            return new UserDetailsDTO
+            bool isValidUser = Authentication.CheckAuthenticate(userName, password, "ra-int");
+            if (!isValidUser)
             {
-                DisplayName = "Patrick Zhong",
-                EmailAddress = "patrick.zhong@example.com",
-                EmployeeId = "A0123456789",
-                Name = "Patrick"
-            };
+                return Unauthorized();
+            }
+
+            UserDetail userDetails = Authentication.GetUserEmailFromAD(userName, password, "ra-int");
+
+            return Ok(userDetails);
         }
     }
 }

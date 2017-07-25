@@ -56,7 +56,7 @@ namespace RAAuthentication.JWTAuthentication
         public bool IsExpired()
         {
             long now = this.CalculateJwtExp(DateTime.UtcNow);
-            return (_jwtPayloadDTO.exp > now ? false : true);
+            return (_jwtPayloadDTO.exp > now ? true : false);
         }
 
         private long CalculateJwtExp(DateTime baseDateTime)
