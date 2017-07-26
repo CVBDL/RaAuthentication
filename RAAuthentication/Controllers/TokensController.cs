@@ -17,7 +17,7 @@ namespace RAAuthentication.Controllers
         public IHttpActionResult CheckToken(AuthorizationDTO authorization)
         {
 
-            if (JWTAuthenticate.Instance().IsValid(authorization.AccessToken))
+            if (JWTAuthenticate.Instance().IsValid(authorization.IdToken))
             {
                 return StatusCode(HttpStatusCode.NoContent);
             }

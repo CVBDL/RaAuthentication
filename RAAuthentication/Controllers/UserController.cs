@@ -21,7 +21,7 @@ namespace RAAuthentication.Controllers
         [Route("")]
         [HttpPost]
         [ResponseType(typeof(AuthorizationDTO))]
-        public IHttpActionResult GetAccessToken(CredentialDTO credential)
+        public IHttpActionResult GetAccessToken([FromBody] CredentialDTO credential)
         {
             string userName = credential.UserName;
             string password = credential.Password;
@@ -35,7 +35,7 @@ namespace RAAuthentication.Controllers
             UserDetail userDetails = Authentication.GetUserEmailFromAD(userName, password, "ra-int");
             AuthorizationDTO authorization = new AuthorizationDTO
             {
-                AccessToken = JWTAuthenticate.Instance().GetToken(userDetails.EmailAddress)
+                IdToken = JWTAuthenticate.Instance().GetToken(userDetails.EmailAddress)
             };
 
             return Ok(authorization);
