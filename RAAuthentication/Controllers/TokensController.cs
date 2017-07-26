@@ -9,7 +9,7 @@ using RAAuthentication.JWTAuthentication;
 
 namespace RAAuthentication.Controllers
 {
-    [RoutePrefix("api/tokens")]
+    [RoutePrefix("api/token")]
     public class TokensController : ApiController
     {
         [Route("validate")]

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Jose;
+using Newtonsoft.Json;
 
 namespace RAAuthentication.JWTAuthentication
 {
@@ -27,19 +28,33 @@ namespace RAAuthentication.JWTAuthentication
             _jwtConfig = new JWTConfig();
         }
 
-        public string GetToken(string email)
+        public string GetBasicToken(string userName)
         {
-            string token = string.Empty;
-            JWTPayload payload = new JWTPayload();
-            payload.email = email;
-
+            string token = null;
             try
             {
-                token = JWT.Encode(payload.jwtPayloadDTO, Encoding.ASCII.GetBytes(_jwtConfig.SecretKey), _jwtConfig.jwsAlgorithm);
+                BasicJwtPayload payload = new BasicJwtPayload(userName);
+                token = JWT.Encode(payload, Encoding.ASCII.GetBytes(_jwtConfig.SecretKey), _jwtConfig.jwsAlgorithm);
             }
             catch
             {
+                return null;
+            }
 
+            return token;
+        }
+
+        public string GetDetailedToken(string userName, string email, string name)
+        {
+            string token = null;
+            try
+            {
+                DetailedJwtPayload payload = new DetailedJwtPayload(userName, email, name);
+                token = JWT.Encode(payload, Encoding.ASCII.GetBytes(_jwtConfig.SecretKey), _jwtConfig.jwsAlgorithm);
+            }
+            catch
+            {
+                return null;
             }
 
             return token;
@@ -60,9 +75,16 @@ namespace RAAuthentication.JWTAuthentication
 
             try
             {
-                // check expiration time
                 string payloadJson = JWT.Decode(token, Encoding.ASCII.GetBytes(_jwtConfig.SecretKey), _jwtConfig.jwsAlgorithm);
-                JWTPayload jwtPayload = new JWTPayload(payloadJson);
+                DetailedJwtPayload jwtPayload = JsonConvert.DeserializeObject<DetailedJwtPayload>(payloadJson);
+
+                // check token issuer
+                if (!string.Equals(jwtPayload.iss, BasicJwtPayload.DEFAULT_ISS, StringComparison.Ordinal))
+                {
+                    return false;
+                }
+
+                // check expiration time
                 if (jwtPayload.IsExpired())
                 {
                     return false;

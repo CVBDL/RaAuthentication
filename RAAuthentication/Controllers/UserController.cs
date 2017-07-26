@@ -21,7 +21,7 @@ namespace RAAuthentication.Controllers
         [Route("")]
         [HttpPost]
         [ResponseType(typeof(AuthorizationDTO))]
-        public IHttpActionResult GetAccessToken([FromBody] CredentialDTO credential)
+        public IHttpActionResult GetAccessToken([FromBody] CredentialDTO credential, [FromUri] string scope = null)
         {
             string userName = credential.UserName;
             string password = credential.Password;
@@ -32,12 +32,24 @@ namespace RAAuthentication.Controllers
                 return Unauthorized();
             }
 
-            UserDetail userDetails = Authentication.GetUserEmailFromAD(userName, password, "ra-int");
-            AuthorizationDTO authorization = new AuthorizationDTO
-            {
-                IdToken = JWTAuthenticate.Instance().GetToken(userDetails.EmailAddress)
-            };
+            AuthorizationDTO authorization = null;
 
+            if (string.Equals(scope, "none", StringComparison.OrdinalIgnoreCase))
+            {
+                authorization = new AuthorizationDTO
+                {
+                    IdToken = JWTAuthenticate.Instance().GetBasicToken(userName)
+                };
+            }
+            else
+            {
+                UserDetail user = Authentication.GetUserEmailFromAD(userName, password, "ra-int");
+                authorization = new AuthorizationDTO
+                {
+                    IdToken = JWTAuthenticate.Instance().GetDetailedToken(userName, user.EmailAddress, user.Name)
+                };
+            }
+            
             return Ok(authorization);
         }
 

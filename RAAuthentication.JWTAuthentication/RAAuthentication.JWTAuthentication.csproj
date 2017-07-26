@@ -48,10 +48,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BasicJwtPayload.cs" />
+    <Compile Include="DetailedJwtPayload.cs" />
     <Compile Include="JWTAuthenticate.cs" />
     <Compile Include="JWTConfig.cs" />
     <Compile Include="JWTExpections.cs" />
-    <Compile Include="JWTPayload.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
