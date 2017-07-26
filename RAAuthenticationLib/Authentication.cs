@@ -22,6 +22,11 @@ namespace RAAuthenticationLib
             using (PrincipalContext pc = new PrincipalContext(ContextType.Domain, domainName, userName, password))
             {
                 UserPrincipal user = UserPrincipal.FindByIdentity(pc, userName);
+                if (null == user)
+                {
+                    return null;
+                }
+
                 UserDetail detail = new UserDetail
                 {
                     DisplayName = user.DisplayName,
