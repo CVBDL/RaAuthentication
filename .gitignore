@@ -5,3 +5,4 @@ bin/
 packages/
 RAAuthentication.csproj.user
 RAAuthenticationLib.csproj.user
+Deployment.pubxml.user
