@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using RAAuthentication.Models;
 using RAAuthentication.JWTAuthentication;
 using RAAuthenticationLib;
 using System.Web.Http.Description;
+using System.Web.Http.Cors;
 
 namespace RAAuthentication.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     [RoutePrefix("api/user")]
     public class UserController : ApiController
     {
