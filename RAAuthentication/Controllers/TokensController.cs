@@ -1,7 +1,7 @@
-﻿using System.Net;
-using System.Web.Http;
+﻿using RAAuthentication.JWTAuthentication;
 using RAAuthentication.Models;
-using RAAuthentication.JWTAuthentication;
+using System.Net;
+using System.Web.Http;
 using System.Web.Http.Cors;
 
 namespace RAAuthentication.Controllers
@@ -14,14 +14,20 @@ namespace RAAuthentication.Controllers
         [HttpPost]
         public IHttpActionResult CheckToken(AuthorizationDTO authorization)
         {
-
-            if (JWTAuthenticate.Instance().IsValid(authorization.IdToken))
+            try
             {
-                return StatusCode(HttpStatusCode.NoContent);
+                if (JWTAuthenticate.Instance().IsValid(authorization.IdToken))
+                {
+                    return StatusCode(HttpStatusCode.NoContent);
+                }
+                else
+                {
+                    return Unauthorized();
+                }
             }
-            else
+            catch
             {
-                return Unauthorized();
+                return InternalServerError();
             }
         }
     }

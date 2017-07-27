@@ -1,11 +1,11 @@
-﻿using System;
-using System.Web.Http;
+﻿using RAAuthentication.JWTAuthentication;
 using RAAuthentication.Models;
-using RAAuthentication.JWTAuthentication;
 using RAAuthenticationLib;
-using System.Web.Http.Description;
-using System.Web.Http.Cors;
+using System;
 using System.Threading.Tasks;
+using System.Web.Http;
+using System.Web.Http.Cors;
+using System.Web.Http.Description;
 
 namespace RAAuthentication.Controllers
 {
@@ -13,6 +13,8 @@ namespace RAAuthentication.Controllers
     [RoutePrefix("api/user")]
     public class UserController : ApiController
     {
+        private const string DOMAIN_NAME = "ra-int";
+
         /// <summary>
         /// Get an access token.
         /// </summary>
@@ -25,31 +27,38 @@ namespace RAAuthentication.Controllers
             string userName = credential.UserName;
             string password = credential.Password;
 
-            bool isValidUser = await Authentication.CheckAuthenticateAsync(userName, password, "ra-int");
-            if (!isValidUser)
+            try
             {
-                return Unauthorized();
-            }
-
-            AuthorizationDTO authorization = null;
-
-            if (string.Equals(scope, "none", StringComparison.OrdinalIgnoreCase))
-            {
-                authorization = new AuthorizationDTO
+                bool isValidUser = await Authentication.CheckAuthenticateAsync(userName, password, DOMAIN_NAME);
+                if (!isValidUser)
                 {
-                    IdToken = JWTAuthenticate.Instance().GetBasicToken(userName)
-                };
-            }
-            else
-            {
-                UserDetail user = await Authentication.GetUserEmailFromADAsync(userName, password, "ra-int");
-                authorization = new AuthorizationDTO
-                {
-                    IdToken = JWTAuthenticate.Instance().GetDetailedToken(userName, user.EmailAddress, user.Name)
-                };
-            }
+                    return Unauthorized();
+                }
 
-            return Ok(authorization);
+                AuthorizationDTO authorization = null;
+
+                if (string.Equals(scope, "none", StringComparison.OrdinalIgnoreCase))
+                {
+                    authorization = new AuthorizationDTO
+                    {
+                        IdToken = JWTAuthenticate.Instance().GetBasicToken(userName)
+                    };
+                }
+                else
+                {
+                    UserDetail user = await Authentication.GetUserEmailFromADAsync(userName, password, DOMAIN_NAME);
+                    authorization = new AuthorizationDTO
+                    {
+                        IdToken = JWTAuthenticate.Instance().GetDetailedToken(userName, user.EmailAddress, user.Name)
+                    };
+                }
+
+                return Ok(authorization);
+            }
+            catch
+            {
+                return InternalServerError();
+            }
         }
 
         /// <summary>
@@ -64,15 +73,22 @@ namespace RAAuthentication.Controllers
             string userName = credential.UserName;
             string password = credential.Password;
 
-            bool isValidUser = await Authentication.CheckAuthenticateAsync(userName, password, "ra-int");
-            if (!isValidUser)
+            try
             {
-                return Unauthorized();
+                bool isValidUser = await Authentication.CheckAuthenticateAsync(userName, password, DOMAIN_NAME);
+                if (!isValidUser)
+                {
+                    return Unauthorized();
+                }
+
+                UserDetail userDetails = await Authentication.GetUserEmailFromADAsync(userName, password, DOMAIN_NAME);
+
+                return Ok(userDetails);
             }
-
-            UserDetail userDetails = await Authentication.GetUserEmailFromADAsync(userName, password, "ra-int");
-
-            return Ok(userDetails);
+            catch
+            {
+                return InternalServerError();
+            }
         }
     }
 }

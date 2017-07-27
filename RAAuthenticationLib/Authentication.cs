@@ -5,10 +5,10 @@ namespace RAAuthenticationLib
 {
     public class Authentication
     {
-        static public Task<bool> CheckAuthenticateAsync(string userName, string password, string domainDame)
+        static public Task<bool> CheckAuthenticateAsync(string userName, string password, string domainName)
         {
             return Task.Run(() => {
-                using (PrincipalContext pc = new PrincipalContext(ContextType.Domain, domainDame, userName, password))
+                using (PrincipalContext pc = new PrincipalContext(ContextType.Domain, domainName, userName, password))
                 {
                     return pc.ValidateCredentials(userName, password, ContextOptions.Negotiate);
                 }
