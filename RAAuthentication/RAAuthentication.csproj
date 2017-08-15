@@ -85,6 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\RootEndpointController.cs" />
     <Compile Include="Controllers\TokensController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
@@ -92,6 +93,7 @@
     </Compile>
     <Compile Include="Models\AuthorizationDTO.cs" />
     <Compile Include="Models\CredentialDTO.cs" />
+    <Compile Include="Models\EndpointCategoriesDTO.cs" />
     <Compile Include="Models\UserDetailsDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
