@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,8 +11,6 @@ namespace RAAuthentication.JWTAuthentication
     {
         public const string DEFAULT_ISS = "RAAuthentication";
 
-        private const int ExpirationTimespanInSeconds = 60 * 60;
-
         public string iss { get; set; }
         public long iat { get; set; }
         public long exp { get; set; }
@@ -21,7 +20,10 @@ namespace RAAuthentication.JWTAuthentication
         {
             iss = DEFAULT_ISS;
             iat = this.CalculateJwtNumericDateValue(DateTime.UtcNow);
-            exp = iat + ExpirationTimespanInSeconds;
+
+            int expirationTimespanInSeconds = int.Parse(ConfigurationManager.AppSettings.Get("ExpirationTimespanInSeconds"));
+            exp = iat + expirationTimespanInSeconds;
+
             aud = userName;
         }
 
